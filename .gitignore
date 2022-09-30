@@ -1,0 +1,8 @@
+# ignore ALL .log files
+*.log
+*.pdf
+*.gv
+
+# ignore ALL files in ANY directory named temp
+temp/ 
+__pycache__
