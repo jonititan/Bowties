@@ -72,13 +72,13 @@ if __name__ == '__main__': # necessary on windows only
 
     az.rcParams["plot.max_subplots"]=100
     az.plot_trace(trace,RVNodes)
-    plt.title('Airprox RV Nodes')
+    plt.suptitle('Airprox RV Nodes')
     plt.tight_layout()
     plt.show()
 
     az.rcParams["plot.max_subplots"]=100
     az.plot_trace(trace,DeterministicNodes)
-    plt.title('Airprox Deterministic Nodes')
+    plt.suptitle('Airprox Deterministic Nodes')
     plt.tight_layout()
     plt.show()
 
