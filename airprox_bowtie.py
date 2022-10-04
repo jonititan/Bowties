@@ -51,9 +51,14 @@ with bt.bowtie() as airprox:
 
     trace = pm.sample(draws=nb_samples, random_seed=1000)
 
+
+ap_effectiveness = bt.barrier_effectiveness(airprox,trace)
+
+
 bowtieplot = bt.plot_all_elements(airprox)
 bowtieplot.view()
-bowtienx = bt.plot_bowtie(airprox)
+bowtienx = bt.plot_bowtie(airprox,trace)
+
 bowtienx.view()
 
 
@@ -61,13 +66,6 @@ bowtienx.view()
 
 
 
-model_nodes = list(airprox.named_vars.keys())
-
-az.rcParams["plot.max_subplots"]=100
-az.plot_trace(trace,model_nodes)
-plt.title('Airprox Nodes')
-plt.tight_layout()
-plt.show()
 
 import code
 code.interact(local=locals())
