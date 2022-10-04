@@ -50,12 +50,15 @@ if __name__ == '__main__': # necessary on windows only
         consequence1 = pm.Deterministic('Consequence\nCollision',bt.consequence(f,barrier3))
         consequence2 = pm.Deterministic('Consequence\nAvoiding Action',bt.consequence(g,barrier3))
 
-
         trace = pm.sample(draws=nb_samples, random_seed=1000)
+
+    ap_effectiveness = bt.barrier_effectiveness(airprox,trace)
+
 
     bowtieplot = bt.plot_all_elements(airprox)
     bowtieplot.view()
-    bowtienx = bt.plot_bowtie(airprox)
+    bowtienx = bt.plot_bowtie(airprox,trace)
+
     bowtienx.view()
 
 
