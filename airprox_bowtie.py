@@ -22,6 +22,8 @@ aesara.config.change_flags(exception_verbosity="high",optimizer=None)
 nb_samples=2000
 if __name__ == '__main__': # necessary on windows only
     with bt.bowtie() as airprox:
+
+        airprox.context = 'Flight activity'
         #variables
         # EventSignal = pm.ConstantData('True',1)
         # NoEventSignal = pm.ConstantData('False',0)
@@ -32,39 +34,46 @@ if __name__ == '__main__': # necessary on windows only
         e = pm.Normal("e", mu=0.0, sigma=5.0)
         f = pm.Normal("f", mu=0.0, sigma=5.0)
         g = pm.Normal("g", mu=0.0, sigma=5.0)
-        #Causes
-        cause1 = pm.Deterministic('Cause\nBad Luck',bt.cause(a))
-        cause2 = pm.Deterministic('Cause\nNo Flight Plan',bt.cause(b))
-            #binary 
+        splitdist = pm.DiscreteUniform('Even Split',lower=0,upper=1)
+
+        #Causes 
+        cause1 = pm.Deterministic('Cause\nBad Luck',bt.cause(splitdist))
+        cause2 = pm.Deterministic('Cause\nNo Flight Plan',bt.cause(bt.invert(splitdist)))
+        airprox.causes = ['Cause\nBad Luck','Cause\nNo Flight Plan']
+            
 
         #Preventory Barriers
         barrier1 = pm.Deterministic('Barrier\nFlight Plan',bt.barrier(c,cause1))
         barrier2 = pm.Deterministic('Barrier\nATC Warning',bt.barrier(d,bt.combine((cause2,barrier1))))
+        barrier3 = pm.Deterministic('Barrier\nPilot Sky\nScanning',bt.barrier(d,barrier2,threshold=2))
+        airprox.prevenativebarriers = ['Barrier\nFlight Plan','Barrier\nATC Warning','Barrier\nPilot Sky\nScanning']
+        
         #Top Event
-        te = pm.Deterministic('Top Event\nImminent loss of seperation',bt.topevent(barrier2))
-
+        te = pm.Deterministic('Top Event\nImminent loss\nof seperation',bt.topevent(barrier3))
+        airprox.topevent = 'Top Event\nImminent loss\nof seperation'
+        
         #Mitigation Barriers
-        barrier3 = pm.Deterministic('Barrier\nSituational Awareness',bt.barrier(e,te))
-
+        barrier4 = pm.Deterministic('Barrier\nSituational Awareness',bt.barrier(e,te))
+        airprox.mitigationbarriers = ['Barrier\nSituational Awareness']
+        
         #Consequences
-        consequence1 = pm.Deterministic('Consequence\nCollision',bt.consequence(f,barrier3))
-        consequence2 = pm.Deterministic('Consequence\nAvoiding Action',bt.consequence(g,barrier3))
-
+        consequence1 = pm.Deterministic('Consequence\nCollision',bt.consequence(barrier4))
+        consequence2 = pm.Deterministic('Consequence\nAvoiding Action',bt.consequence(bt.inverting_and(barrier4,te)))
+        airprox.consequences = ['Consequence\nCollision','Consequence\nAvoiding Action']
         trace = pm.sample(draws=nb_samples, random_seed=1000)
 
-    ap_effectiveness = bt.barrier_effectiveness(airprox,trace)
+
+    print(airprox.allbarriers())
+    print(list(airprox.named_vars.keys()))
+    # ap_effectiveness = airprox.barrier_effectiveness(trace)
 
 
     bowtieplot = bt.plot_all_elements(airprox)
     bowtieplot.view()
-    bowtienx = bt.plot_bowtie(airprox,trace)
+    bowtienx = airprox.plot_bowtie(trace,
+                                    e2r=[('Top Event\nImminent loss\nof seperation','Consequence\nAvoiding Action')]) #removing extra edge caused by inverting_and function
 
     bowtienx.view()
-
-
-
-
-
 
     model_nodes = list(airprox.named_vars.keys())
     RVNodes = ['a','b','c','d','e','f','g']
