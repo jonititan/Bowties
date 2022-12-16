@@ -1,4 +1,3 @@
-from matplotlib import test
 import pymc as pm
 import networkx as nx
 import arviz as az
