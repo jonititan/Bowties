@@ -10,6 +10,7 @@
 # ignore ALL files in ANY directory named temp
 temp/ 
 bowtietest/
+.venv/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

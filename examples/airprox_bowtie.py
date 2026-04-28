@@ -2,8 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pymc as pm
 import arviz as az
-import aesara
-import aesara.tensor as at
+import pytensor
+import pytensor.tensor as pt
 from scipy import stats
 import numpy as np
 import os
@@ -12,12 +12,12 @@ import bowties as bt
 
 print(
     f"""
-# Aesara version: {aesara.__version__}
+# PyTensor version: {pytensor.__version__}
 # PyMC version: {pm.__version__}
 """
 )
 
-aesara.config.change_flags(exception_verbosity="high",optimizer=None)
+pytensor.config.change_flags(exception_verbosity="high",optimizer=None)
 
 nb_samples=2000
 if __name__ == '__main__': # necessary on windows only
