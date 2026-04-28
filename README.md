@@ -23,9 +23,13 @@ graph LR;
 
 # Installation
 Install PyMC using uv in the folder along with this repo.
+
 uv init 
+
 uv venv
+
 uv pip install pymc
+
 uv pip install -e .
 
 Then you can run the example
