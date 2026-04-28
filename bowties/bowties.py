@@ -30,7 +30,7 @@ class bowtie(pm.Model): #extend pymc model
         self.consequencesum=None
         self.context=''
         self.topevent=''
-        self.prevenativebarriers=[]
+        self.preventativebarriers=[]
         self.mitigationbarriers=[]
         self.escalatoryfactors=[]
         self.variables=[]
@@ -46,7 +46,7 @@ class bowtie(pm.Model): #extend pymc model
     
     def allbarriers(self):
         all = []
-        all.extend(self.prevenativebarriers)
+        all.extend(self.preventativebarriers)
         all.extend(self.mitigationbarriers)
         return all
     
@@ -60,7 +60,7 @@ class bowtie(pm.Model): #extend pymc model
     
     def allbowtie(self):
         all = []
-        all.extend(self.prevenativebarriers)
+        all.extend(self.preventativebarriers)
         all.extend(self.mitigationbarriers)
         all.append(self.topevent)
         all.append(self.context)
@@ -126,7 +126,7 @@ class bowtie(pm.Model): #extend pymc model
             if node[0] in self.allbarriers():
                 node[1]['label'] = node[1]['label'].split('~')[0] + 'E: {:.4f} CE: {:.4f}'.format(effective[node[0]],cumulativeeffective[node[0]])
                 mapping[node[0]] = node[1]
-                if node[0] in self.prevenativebarriers:
+                if node[0] in self.preventativebarriers:
                     for key,value in self.styles['pb'].items():
                        mapping[node[0]][key] = value
                 elif node[0] in self.mitigationbarriers:

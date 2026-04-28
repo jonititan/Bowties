@@ -42,11 +42,11 @@ if __name__ == '__main__': # necessary on windows only
         airprox.causes = ['Cause\nBad Luck','Cause\nNo Flight Plan']
             
 
-        #Preventory Barriers
+        #Preventative Barriers
         barrier1 = pm.Deterministic('Barrier\nFlight Plan',bt.barrier(c,cause1))
         barrier2 = pm.Deterministic('Barrier\nATC Warning',bt.barrier(d,bt.combine((cause2,barrier1))))
         barrier3 = pm.Deterministic('Barrier\nPilot Sky\nScanning',bt.barrier(d,barrier2,threshold=2))
-        airprox.prevenativebarriers = ['Barrier\nFlight Plan','Barrier\nATC Warning','Barrier\nPilot Sky\nScanning']
+        airprox.preventativebarriers = ['Barrier\nFlight Plan','Barrier\nATC Warning','Barrier\nPilot Sky\nScanning']
         
         #Top Event
         te = pm.Deterministic('Top Event\nImminent loss\nof seperation',bt.topevent(barrier3))
