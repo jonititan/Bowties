@@ -28,7 +28,7 @@ uv init
 
 uv venv
 
-uv pip install pymc
+uv pip install pymc networkx pandas matplotlib graphviz
 
 uv pip install -e .
 
